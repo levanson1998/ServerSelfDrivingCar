@@ -2,7 +2,6 @@ var express = require('express'),
 app = express(),
 server = require('http').createServer(app),
 io = require('socket.io').listen(server),
-users = {};
 server.listen(process.env.PORT || 3000);  
 app.use(express.static(__dirname + '/public'));
 var fs = require("fs");
@@ -11,6 +10,7 @@ var message="Self Driving Car";
 var deviceConnect;
 var image;
 var captime;
+var user;
 var androidClients = [];
 var nhanDuoc = false;
 var car_status;
@@ -18,7 +18,7 @@ var img_text;
 var poweroff=true;
 var nhanDuoc1 = false;
 var androidClients = [];
-app.get("/", (req, res) => { res.render(__dirname + "/index.ejs", { message:message, image:image, captime:captime }); });
+app.get("/", (req, res) => { res.render(__dirname + "/index.ejs", { message:message, image:image, captime:captime,user:user }); });
 
 //Thông báo có thiết bị kết nối
 io.sockets.on('connection',function(socket){
@@ -27,6 +27,7 @@ io.sockets.on('connection',function(socket){
         console.log("There is a new device connected to server !!!");
         console.log("Android connected! ID: "+socket.id);
         androidClients.push(socket.id);
+        user = "device: " + androidClients.length;
     })
 
 /*
